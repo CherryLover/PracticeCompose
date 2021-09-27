@@ -11,7 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.practicecompose.page.GoogleSignUpActivity
+import com.example.practicecompose.page.YouTubeSampleActivity
 
 class EntranceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,7 @@ class EntranceActivity : AppCompatActivity() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                SampleItem("GoogleSignUpButton") { GoogleSignUpActivity.start(this@EntranceActivity) }
+                SampleItem("GoogleSignUpButton") { YouTubeSampleActivity.start(this@EntranceActivity) }
             }
         }
     }

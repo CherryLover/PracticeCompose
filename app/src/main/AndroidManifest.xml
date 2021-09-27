@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".page.GoogleSignUpActivity"
+            android:name=".page.YouTubeSampleActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
