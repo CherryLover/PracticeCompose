@@ -10,3 +10,5 @@ val teal200 = Color(0xFF03DAC5)
 val gradientColor1 = Color(0xFFC6FFDD)
 val gradientColor2 = Color(0xFFFBD786)
 val gradientColor3 = Color(0xFFF7797D)
+
+val priceColor = Color(0xFFF40005)
