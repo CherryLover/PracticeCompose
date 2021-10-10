@@ -8,7 +8,7 @@
 ## 练习进度
 
 1. [Basic](https://developer.android.com/codelabs/jetpack-compose-basics) 完成
-2. [Layout](https://developer.android.com/codelabs/jetpack-compose-layouts) 未进行
+2. [Layout](https://developer.android.com/codelabs/jetpack-compose-layouts) 进行中：Slot API
 3. [GoogleSignUpButton](https://www.youtube.com/watch?v=ZECjMRINJkk&list=PLSrm9z4zp4mEWwyiuYgVMWcDFdsebhM-r&index=12&ab_channel=Stevdza-San) 完成
 4. [GradientButton](https://www.youtube.com/watch?v=vPOS6L2SEX0&list=PLSrm9z4zp4mEWwyiuYgVMWcDFdsebhM-r&index=15&ab_channel=Stevdza-San) 完成
 5. [CustomText](https://www.youtube.com/watch?v=iIm-7fmjyaA&list=PLSrm9z4zp4mEWwyiuYgVMWcDFdsebhM-r&index=7&ab_channel=Stevdza-San) 完成
