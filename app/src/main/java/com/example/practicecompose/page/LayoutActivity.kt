@@ -10,10 +10,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,10 +53,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.practicecompose.R
 import com.example.practicecompose.ui.theme.PracticeComposeTheme
 import kotlinx.coroutines.launch
 import kotlin.math.max
-import com.example.practicecompose.R
 
 /**
  * @description
@@ -81,6 +84,7 @@ class LayoutActivity : AppCompatActivity() {
                         R.drawable.ic_baseline_near_me_disabled_24,
                         text = "Location"
                     )
+                    AppBar()
 //                    LayoutHello(text = "Hi There")
                     //        ScaffoldText()
 //                    ScrollLayoutList()
@@ -94,7 +98,8 @@ class LayoutActivity : AppCompatActivity() {
 @Composable
 fun LayoutPreview() {
     Column {
-        UserInfoCard()
+        AppBar()
+//        UserInfoCard()
 //        ButtonWithIcon()
 //        LayoutHello(text = "Hi There")
 //        ScaffoldText()
@@ -267,6 +272,103 @@ fun ScaffoldText(
             contentLine.forEach { lineText ->
                 Text(text = lineText)
             }
+        }
+    }
+}
+
+@Composable
+fun AppBar(
+    appBarBackgroundColor: Color = MaterialTheme.colors.primary,
+    navigationResId: Int = R.drawable.ic_baseline_menu_24,
+    navigationClick: (() -> Unit)? = null,
+    title: String = "Home",
+    menuIconArray: MutableList<Int> = mutableListOf(
+        R.drawable.ic_baseline_search_24,
+        R.drawable.ic_baseline_favorite_border_24,
+        R.drawable.ic_baseline_more_vert_24,
+        R.drawable.ic_baseline_near_me_24
+    ),
+    maxMenuCount: Int = 3
+) {
+    val menus = mutableListOf<Int>()
+    if (menuIconArray.size > maxMenuCount) {
+        repeat(maxMenuCount) {
+            menus.add(menuIconArray[it])
+        }
+    } else {
+        menus.addAll(menuIconArray)
+    }
+    val iconSize: Dp = 24.dp
+    val iconTintColor: Color = Color.White
+    val titleTextColor: Color = Color.White
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(appBarBackgroundColor),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            modifier = Modifier
+                .size(iconSize)
+                .clickable {
+                    navigationClick?.invoke()
+                },
+            painter = painterResource(id = navigationResId), contentDescription = "navigate_menu",
+            tint = iconTintColor
+        )
+        Spacer(modifier = Modifier.width(32.dp))
+        Text(text = title, fontSize = 18.sp, color = titleTextColor)
+        Row(
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                    modifier = Modifier
+                        .size(iconSize)
+                        .clickable {
+                            Log.d("Menu_click", "click search ");
+                        },
+                    painter = painterResource(id = R.drawable.ic_baseline_search_24), contentDescription = "search",
+                    tint = iconTintColor
+                )
+            Spacer(modifier = Modifier.width(24.dp))
+            Icon(
+                modifier = Modifier.size(iconSize).clickable {
+                    Log.d("Menu_click", "click like ");
+                },
+                painter = painterResource(id = R.drawable.ic_baseline_favorite_border_24), contentDescription = "like",
+                tint = iconTintColor
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            Icon(
+                modifier = Modifier.size(iconSize).clickable {
+                    Log.d("Menu_click", "click more ");
+                },
+                painter = painterResource(id = R.drawable.ic_baseline_more_vert_24), contentDescription = "more",
+                tint = iconTintColor
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+//            menus.forEach {
+//                Icon(
+//                    modifier = Modifier
+//                        .size(iconSize)
+//                        .clickable {
+//                            Log.d("Menu_AppBar", "click menu $it");
+//                        },
+//                    painter = painterResource(id = it), contentDescription = "menu_$it",
+//                    tint = iconTintColor
+//                )
+//                if (it == menus.size) {
+//                    Spacer(modifier = Modifier.width(16.dp))
+//                } else {
+//                    Spacer(modifier = Modifier.width(24.dp))
+//                }
+//            }
         }
     }
 }
