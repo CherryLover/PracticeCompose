@@ -76,7 +76,11 @@ class LayoutActivity : AppCompatActivity() {
             PracticeComposeTheme {
                 Column {
                     UserInfoCard()
-                    ButtonWithIcon()
+                    ButtonWithIcon(
+                        R.drawable.ic_baseline_near_me_24,
+                        R.drawable.ic_baseline_near_me_disabled_24,
+                        text = "Location"
+                    )
 //                    LayoutHello(text = "Hi There")
                     //        ScaffoldText()
 //                    ScrollLayoutList()
@@ -266,29 +270,35 @@ fun ScaffoldText(
         }
     }
 }
-// TODO-JiangJiweiFeat: 2021/10/10 More Icon style to cutsom
 
 @Composable
-fun ButtonWithIcon() {
+fun ButtonWithIcon(
+    checkIconId: Int = R.drawable.ic_baseline_favorite_24,
+    unCheckIconId: Int = R.drawable.ic_baseline_favorite_border_24,
+    iconTintColor: Color = Color.Unspecified,
+    text: String = "Like",
+    onClick: (() -> Unit)? = null
+) {
     var likeChecked by remember { mutableStateOf(false) }
-    var iconResId by remember { mutableStateOf(R.drawable.ic_baseline_favorite_border_24)}
+    var iconResId by remember { mutableStateOf(unCheckIconId) }
     Button(onClick = {
         likeChecked = !likeChecked
         iconResId = if (likeChecked) {
-            R.drawable.ic_baseline_favorite_24
+            checkIconId
         } else {
-            R.drawable.ic_baseline_favorite_border_24
+            unCheckIconId
         }
         Log.d("IconButton", "onClick --> IconButton $likeChecked")
+        onClick?.invoke()
     }) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(id = iconResId),
-                contentDescription = "Like",
-                tint = Color.Unspecified
+                contentDescription = text,
+                tint = iconTintColor
             )
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = "Like", fontSize = 14.sp)
+            Text(text = text, fontSize = 14.sp)
         }
     }
 }
