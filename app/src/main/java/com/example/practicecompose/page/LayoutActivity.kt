@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -99,6 +98,7 @@ class LayoutActivity : AppCompatActivity() {
 fun LayoutPreview() {
     Column {
         AppBar()
+        UseTopAppBar()
 //        UserInfoCard()
 //        ButtonWithIcon()
 //        LayoutHello(text = "Hi There")
@@ -277,6 +277,45 @@ fun ScaffoldText(
 }
 
 @Composable
+fun UseTopAppBar(
+    menuIconArray: MutableList<Int> = mutableListOf(
+        R.drawable.ic_baseline_search_24,
+        R.drawable.ic_baseline_favorite_border_24,
+        R.drawable.ic_baseline_more_vert_24,
+        R.drawable.ic_baseline_near_me_24
+    )
+) {
+    TopAppBar(title = {
+        Text(text = "Home", fontSize = 18.sp)
+    }, navigationIcon = {
+        Box(contentAlignment = Alignment.Center) {
+            Icon(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(id = R.drawable.ic_baseline_menu_24),
+                contentDescription = "navigation"
+            )
+        }
+    }, actions = {
+        menuIconArray.forEachIndexed { index, it ->
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        Log.d("Menu_AppBar", "click menu $it");
+                    },
+                painter = painterResource(id = it), contentDescription = "menu_$it",
+                tint = Color.Unspecified
+            )
+            if (index == menuIconArray.size - 1) {
+                Spacer(modifier = Modifier.width(16.dp))
+            } else {
+                Spacer(modifier = Modifier.width(24.dp))
+            }
+        }
+    })
+}
+
+@Composable
 fun AppBar(
     appBarBackgroundColor: Color = MaterialTheme.colors.primary,
     navigationResId: Int = R.drawable.ic_baseline_menu_24,
@@ -327,48 +366,22 @@ fun AppBar(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
+            menus.forEachIndexed { index, it ->
+                Icon(
                     modifier = Modifier
                         .size(iconSize)
                         .clickable {
-                            Log.d("Menu_click", "click search ");
+                            Log.d("Menu_AppBar", "click menu $it");
                         },
-                    painter = painterResource(id = R.drawable.ic_baseline_search_24), contentDescription = "search",
+                    painter = painterResource(id = it), contentDescription = "menu_$it",
                     tint = iconTintColor
                 )
-            Spacer(modifier = Modifier.width(24.dp))
-            Icon(
-                modifier = Modifier.size(iconSize).clickable {
-                    Log.d("Menu_click", "click like ");
-                },
-                painter = painterResource(id = R.drawable.ic_baseline_favorite_border_24), contentDescription = "like",
-                tint = iconTintColor
-            )
-            Spacer(modifier = Modifier.width(24.dp))
-            Icon(
-                modifier = Modifier.size(iconSize).clickable {
-                    Log.d("Menu_click", "click more ");
-                },
-                painter = painterResource(id = R.drawable.ic_baseline_more_vert_24), contentDescription = "more",
-                tint = iconTintColor
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-//            menus.forEach {
-//                Icon(
-//                    modifier = Modifier
-//                        .size(iconSize)
-//                        .clickable {
-//                            Log.d("Menu_AppBar", "click menu $it");
-//                        },
-//                    painter = painterResource(id = it), contentDescription = "menu_$it",
-//                    tint = iconTintColor
-//                )
-//                if (it == menus.size) {
-//                    Spacer(modifier = Modifier.width(16.dp))
-//                } else {
-//                    Spacer(modifier = Modifier.width(24.dp))
-//                }
-//            }
+                if (index == menus.size - 1) {
+                    Spacer(modifier = Modifier.width(16.dp))
+                } else {
+                    Spacer(modifier = Modifier.width(24.dp))
+                }
+            }
         }
     }
 }
