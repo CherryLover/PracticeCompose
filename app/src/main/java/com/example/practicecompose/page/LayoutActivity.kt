@@ -99,28 +99,7 @@ fun LayoutPreview() {
     Column {
         AppBar()
         UseTopAppBar()
-//        UserInfoCard()
-//        ButtonWithIcon()
-//        LayoutHello(text = "Hi There")
-//        ScaffoldText()
-//        ScrollLayoutList()
-//        TagItem()
-
-//        val topics = listOf("Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary", "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy", "Religion")
-//
-//        Row(
-//            modifier = Modifier
-//                .background(color = Color.LightGray)
-//                .padding(16.dp)
-//                .size(200.dp)
-//                .horizontalScroll(rememberScrollState())
-//        ) {
-//            StaggeredGridLayout(modifier = Modifier) {
-//                topics.forEach { tagText ->
-//                    TagItem(text = tagText, modifier = Modifier.padding(8.dp))
-//                }
-//            }
-//        }
+        ScaffoldText()
     }
 }
 
@@ -252,17 +231,15 @@ fun ScaffoldText(
             TopAppBar(title = {
                 Text(text = "Scaffold Tab")
             }, modifier = Modifier
-                .fillMaxWidth()
-                .height(20.dp), actions = {
+                .fillMaxWidth(), actions = {
                 IconButton(onClick = {
                     Log.d("onClick", " --> Scaffold Tab Icon")
                 }) {
                     Icon(Icons.Filled.Favorite, contentDescription = "Favorite")
                 }
-            })/* {
-        无用的大括号记得删除，
-        > Note: 03-02 06:42 无用的大括号记得删除，否则可能引起编译报错
-        }*/
+            }, navigationIcon = {
+                Icon(painter = painterResource(id = R.drawable.ic_baseline_menu_24), contentDescription = "menu")
+            })
         }, modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
