@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.practicecompose.page.LayoutActivity
+import com.example.practicecompose.page.NavigationActivity
 import com.example.practicecompose.page.YouTubeSampleActivity
 
 class EntranceActivity : AppCompatActivity() {
@@ -29,6 +30,8 @@ class EntranceActivity : AppCompatActivity() {
                 SampleItem("GoogleSignUpButton") { YouTubeSampleActivity.start(this@EntranceActivity) }
                 Spacer(modifier = Modifier.height(10.dp))
                 SampleItem("CodeLab Layout") { LayoutActivity.start(this@EntranceActivity) }
+                Spacer(modifier = Modifier.height(10.dp))
+                SampleItem("Navigation") { NavigationActivity.start(this@EntranceActivity) }
             }
         }
     }
