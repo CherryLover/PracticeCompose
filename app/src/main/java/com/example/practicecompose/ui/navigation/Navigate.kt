@@ -39,5 +39,8 @@ fun NavigationEntrance() {
                 it.arguments?.getInt(Router.Companion.Profile.KEY_OPTIONAL_COUNT) ?: -2
             )
         }
+        composable(Router.NewsContainer.finalRouter()) {
+            NewsContainerScreen()
+        }
     }
 }
