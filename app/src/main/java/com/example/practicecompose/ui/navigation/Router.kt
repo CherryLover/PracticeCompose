@@ -1,5 +1,7 @@
 package com.example.practicecompose.ui.navigation
 
+import com.example.practicecompose.R
+
 /**
  * @description
  * @author: Created jiangjiwei in 2021/11/7 6:23 下午
@@ -13,6 +15,11 @@ sealed class Router(val router: String) {
     open fun argRouter(count: Int): String {
         return router
     }
+
+    object NewsContainer : Router("NewsContainer")
+    object News : Router("News")
+    object Explore : Router("Explore")
+    object Favorite : Router("Favorite")
 
     companion object {
         object Main : Router("Main")
@@ -37,5 +44,19 @@ sealed class Router(val router: String) {
                 return "$router?$KEY_OPTIONAL_COUNT=$count"
             }
         }
+    }
+}
+
+class NewsContainerBottomNavigateItem(
+    val name: String,
+    val normalIconId: Int,
+    val router: String,
+) {
+    companion object {
+        val list = mutableListOf(
+            NewsContainerBottomNavigateItem("News", R.drawable.ic_baseline_android_24, Router.News.finalRouter()),
+            NewsContainerBottomNavigateItem("Explore", R.drawable.ic_baseline_near_me_24, Router.Explore.finalRouter()),
+            NewsContainerBottomNavigateItem("Favorite", R.drawable.ic_baseline_favorite_24, Router.Favorite.finalRouter())
+        )
     }
 }
