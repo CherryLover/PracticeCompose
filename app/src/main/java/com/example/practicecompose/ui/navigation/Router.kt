@@ -21,6 +21,11 @@ sealed class Router(val router: String) {
     object Explore : Router("Explore")
     object Favorite : Router("Favorite")
 
+    object LayoutMain: Router("Layout_Main")
+    object LayoutUserInfo: Router("Layout_UserInfo")
+    object LayoutCheckedButtonWithIcon: Router("Layout_CheckedButtonWithIcon")
+    object LayoutSlot: Router("Layout_Slot")
+
     companion object {
         object Main : Router("Main")
         object Feed : Router("Feed") {

@@ -156,6 +156,15 @@ fun BasicScreen(
     }
 }
 
+@Composable
+fun NavigationButton(buttonText: String, router: String, navController: NavController) {
+    Button(onClick = {
+        navController.navigate(route = router)
+    }) {
+        Text(text = buttonText)
+    }
+}
+
 @Preview
 @Composable
 fun ScreenPreview() {
