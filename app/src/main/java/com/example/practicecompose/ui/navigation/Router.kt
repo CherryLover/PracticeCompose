@@ -25,6 +25,7 @@ sealed class Router(val router: String) {
     object LayoutUserInfo: Router("Layout_UserInfo")
     object LayoutCheckedButtonWithIcon: Router("Layout_CheckedButtonWithIcon")
     object LayoutSlot: Router("Layout_Slot")
+    object LayoutList: Router("Layout_List")
 
     companion object {
         object Main : Router("Main")

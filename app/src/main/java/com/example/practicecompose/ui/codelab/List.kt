@@ -1,13 +1,11 @@
 package com.example.practicecompose.ui.codelab
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -33,56 +31,116 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
-        ScrollLayoutList()
+        HorizontalPureList()
+        Row {
+            VerticalPureList()
+            VerticalLazyList()
+        }
     }
 }
 
 @Composable
-fun ScrollLayoutList() {
+fun HorizontalPureList() {
+    val scrollState = rememberScrollState()
+    Row(
+        modifier = Modifier
+            .horizontalScroll(scrollState)
+            .fillMaxWidth()
+            .height(48.dp)
+    ) {
+        repeat(100) {
+            ScrollItem(it, item = "Horizontal List Item $it")
+        }
+    }
+}
+
+@Composable
+fun VerticalPureList() {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .background(Color.LightGray)
+    ) {
+        repeat(100) {
+            ScrollItem(it, item = "Vertical List Item $it", maxWidth = false)
+        }
+    }
+}
+
+@Composable
+fun VerticalLazyList() {
     val dataList: MutableList<String> = MutableList(100) {
-        return@MutableList "OnItem $it"
+        return@MutableList "Vertical LazyList $it"
     }
     val lazyScrollSate = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    Button(onClick = {
-        coroutineScope.launch {
-            val next = if (lazyScrollSate.firstVisibleItemIndex < (dataList.size / 2)) {
-                dataList.size - 1
-            } else {
-                0
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = {
+            coroutineScope.launch {
+                val next = if (lazyScrollSate.firstVisibleItemIndex < (dataList.size / 2)) {
+                    dataList.size - 1
+                } else {
+                    0
+                }
+                lazyScrollSate.animateScrollToItem(next)
             }
-            lazyScrollSate.animateScrollToItem(next)
+        }) {
+            Text(text = "Scroll with Animation")
         }
-    }) {
-        Text(text = "Scroll with Animation")
+        Spacer(modifier = Modifier.height(10.dp))
+        Button(onClick = {
+            coroutineScope.launch {
+                val next = if (lazyScrollSate.firstVisibleItemIndex < (dataList.size / 2)) {
+                    dataList.size - 1
+                } else {
+                    0
+                }
+                lazyScrollSate.firstVisibleItemIndex
+                lazyScrollSate.scrollToItem(next)
+            }
+        }) {
+            Text(text = "Scroll with fast")
+        }
+        LazyColumn(state = lazyScrollSate, modifier = Modifier.fillMaxWidth()) {
+            itemsIndexed(dataList) { i, item ->
+                ScrollItem(i, item, true)
+            }
+        }
     }
-    Button(onClick = {
-        coroutineScope.launch {
-            val next = if (lazyScrollSate.firstVisibleItemIndex < (dataList.size / 2)) {
-                dataList.size - 1
-            } else {
-                0
+}
+
+val colors = mutableListOf(Color.White, Color.LightGray)
+
+@Composable
+private fun ScrollItem(position: Int, item: String, maxWidth: Boolean = false, itemClick: (() -> Unit)? = null) {
+    val clickState = remember { mutableStateOf(false) }
+    val modifier = if (maxWidth) {
+        Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(if (position % 2 == 0) colors[1] else colors[0])
+            .clickable {
+                clickState.value = !clickState.value
+                itemClick?.invoke()
             }
-            lazyScrollSate.firstVisibleItemIndex
-            lazyScrollSate.scrollToItem(next)
-        }
-    }) {
-        Text(text = "Scroll with fast")
+    } else {
+        Modifier
+            .height(48.dp)
+            .background(if (position % 2 == 0) colors[1] else colors[0])
+            .clickable {
+                clickState.value = !clickState.value
+                itemClick?.invoke()
+            }
     }
-    LazyColumn(state = lazyScrollSate) {
-        items(items = dataList) { item ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val clickState = remember { mutableStateOf(false) }
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = "icon", modifier = Modifier.size(50.dp)
-                )
-                Text(text = "on RecyclerView $item", Modifier.clickable {
-                    clickState.value = !clickState.value
-                    coroutineScope.launch {
-                        lazyScrollSate.scrollToItem(0, 0)
-                    }
-                }, color = if (clickState.value) Color.Blue else Color.Red)
-            }
-        }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = "icon", modifier = Modifier.size(20.dp)
+        )
+        Text(text = item, color = if (clickState.value) Color.Blue else Color.Red)
     }
 }

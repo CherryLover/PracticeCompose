@@ -63,12 +63,25 @@ class LayoutActivity : AppCompatActivity() {
                     composable(Router.LayoutSlot.router) {
                         CustomSlotScreen()
                     }
+                    composable(Router.LayoutList.router) {
+                        ListScreen()
+                    }
                 }
             }
         }
     }
 }
 
+@Composable
+fun ListScreen() {
+    BasicLayoutScreen("List Part") {
+        HorizontalPureList()
+        Row {
+            VerticalPureList()
+            VerticalLazyList()
+        }
+    }
+}
 @Composable
 fun CustomSlotScreen() {
     BasicLayoutScreen("CheckedButtonWithIcon") {
@@ -105,6 +118,8 @@ fun LayoutMainScreen(navController: NavController) {
         NavigationButton("CheckedButtonWithIcon", Router.LayoutCheckedButtonWithIcon.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
         NavigationButton("FakeSlot", Router.LayoutSlot.router, navController)
+        Spacer(modifier = Modifier.height(10.dp))
+        NavigationButton("List Part", Router.LayoutList.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
