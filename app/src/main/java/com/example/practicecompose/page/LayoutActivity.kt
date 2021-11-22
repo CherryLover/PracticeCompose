@@ -50,24 +50,56 @@ class LayoutActivity : AppCompatActivity() {
             val navController = rememberNavController()
             PracticeComposeTheme {
                 NavHost(navController = navController, startDestination = Router.LayoutMain.router) {
-                    composable(Router.LayoutMain.router) {
-                        LayoutMainScreen(navController = navController)
-                    }
-                    composable(Router.LayoutUserInfo.router) {
-                        UserInfoScreen()
-                    }
-                    composable(Router.LayoutCheckedButtonWithIcon.router) {
-                        CheckedButtonWithIconScreen()
-                    }
-                    composable(Router.LayoutSlot.router) {
-                        CustomSlotScreen()
-                    }
-                    composable(Router.LayoutList.router) {
-                        ListScreen()
-                    }
+                    composable(Router.LayoutMain.router) { LayoutMainScreen(navController = navController) }
+                    composable(Router.LayoutUserInfo.router) { UserInfoScreen() }
+                    composable(Router.LayoutCheckedButtonWithIcon.router) { CheckedButtonWithIconScreen() }
+                    composable(Router.LayoutSlot.router) { CustomSlotScreen() }
+                    composable(Router.LayoutList.router) { ListScreen() }
+                    composable(Router.Image.router) { ImageScreen() }
+                    composable(Router.CustomModifier.router) { CustomModifierScreen() }
+                    composable(Router.CustomLayout.router) { CustomLayoutScreen() }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomLayoutScreen() {
+    val topics = listOf(
+        "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
+        "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
+        "Religion", "Social sciences", "Technology", "TV", "Writing"
+    )
+    val scrollState = rememberScrollState()
+    BasicLayoutScreen(name = "CustomLayout") {
+        StaggeredGridLayout(modifier = Modifier.horizontalScroll(scrollState)) {
+            topics.forEachIndexed { index, s ->
+                TagItem(
+                    modifier = Modifier
+                        .padding(start = 8.dp, top = 8.dp)
+                        .clickable {
+                            Log.d("TagItem", "onClick $index")
+                        }, text = s
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomModifierScreen() {
+    BasicLayoutScreen(name = "Custom Modifier") {
+        CustomModifierToMargin()
+        CustomCol()
+        CustomRow()
+    }
+}
+
+@Composable
+fun ImageScreen() {
+    BasicLayoutScreen(name = "Coil Image") {
+        ImageListItem()
     }
 }
 
@@ -120,27 +152,12 @@ fun LayoutMainScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
         NavigationButton("List Part", Router.LayoutList.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
-        ImageListItem()
+        NavigationButton("Image", Router.Image.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
-        CustomModifierToMargin()
-        CustomCol()
-        CustomRow()
-        val topics = listOf(
-            "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
-            "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
-            "Religion", "Social sciences", "Technology", "TV", "Writing"
-        )
-        val scrollState = rememberScrollState()
-        StaggeredGridLayout(modifier = Modifier.horizontalScroll(scrollState)) {
-            topics.forEachIndexed { index, s ->
-                TagItem(modifier = Modifier
-                    .padding(start = 8.dp, top = 8.dp)
-                    .clickable {
-                        Log.d("TagItem", "onClick $index")
-                    }, text = s
-                )
-            }
-        }
+        NavigationButton("CustomModifier", Router.CustomModifier.router, navController)
+        Spacer(modifier = Modifier.height(10.dp))
+        NavigationButton("CustomLayout", Router.CustomLayout.router, navController)
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
