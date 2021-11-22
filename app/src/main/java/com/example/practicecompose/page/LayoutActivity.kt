@@ -3,21 +3,21 @@ package com.example.practicecompose.page
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -28,7 +28,6 @@ import com.example.practicecompose.ui.codelab.*
 import com.example.practicecompose.ui.navigation.NavigationButton
 import com.example.practicecompose.ui.navigation.Router
 import com.example.practicecompose.ui.theme.PracticeComposeTheme
-import kotlin.math.max
 
 /**
  * @description
@@ -124,6 +123,42 @@ fun LayoutMainScreen(navController: NavController) {
         ImageListItem()
         Spacer(modifier = Modifier.height(10.dp))
         CustomModifierToMargin()
+        CustomCol()
+        CustomRow()
+        val topics = listOf(
+            "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
+            "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
+            "Religion", "Social sciences", "Technology", "TV", "Writing"
+        )
+        val scrollState = rememberScrollState()
+        StaggeredGridLayout(modifier = Modifier.horizontalScroll(scrollState)) {
+            topics.forEachIndexed { index, s ->
+                TagItem(modifier = Modifier
+                    .padding(start = 8.dp, top = 8.dp)
+                    .clickable {
+                        Log.d("TagItem", "onClick $index")
+                    }, text = s
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CustomRow() {
+    MyRow(Modifier.background(Color.Green)) {
+        Text(text = "Line Count 2\nLine Count 2")
+        Text(text = "Line Count 1")
+        Text(text = "Line Count 3\nLine Count 3\nLine Count 3")
+    }
+}
+
+@Composable
+private fun CustomCol() {
+    MyColumn(modifier = Modifier.background(Color.LightGray)) {
+        Text(text = "Line 1: First Line")
+        Text(text = "More width than line 1")
+        Text(text = "leff Line 1")
     }
 }
 
@@ -179,63 +214,3 @@ fun BasicLayoutScreen(name: String, content: @Composable ColumnScope.() -> Unit)
         }
     }
 }
-
-/**
- * 如何自定义 Layout
- * 通过 Layout 方法的 measurables 进行逐个测量，测量的为 items 的宽高
- * 根据 Item 的摆放规则，计算得出目标摆放方式下的尺寸信息
- *
- * 以上相当于 ViewGroup#onMeasure
- * 以下相当于 ViewGroup#onLayout 方法，不过最终设置到 ViewGroup 的尺寸信息是在 onMeasure 方法中，而非在 layout 方法中进行的设置
- *
- * 遍历 Items 进行摆放
- */
-@Composable
-fun StaggeredGridLayout(modifier: Modifier, rows: Int = 3, content: @Composable() () -> Unit) {
-    Layout(modifier = modifier, content = content) { measurables, constraints ->
-        val rowWidths = IntArray(rows) { 0 }
-        val rowHeights = IntArray(rows) { 0 }
-        val placeables = measurables.mapIndexed { index, measurable ->
-            val placeable = measurable.measure(constraints)
-            val row = index % rows
-            rowWidths[row] += placeable.width
-            rowHeights[row] = max(rowHeights[row], placeable.height)
-            placeable
-        }
-
-        val width = rowWidths.maxOrNull()?.coerceIn(constraints.minWidth.rangeTo(constraints.maxWidth)) ?: constraints.minWidth
-        val height = rowHeights.sumBy { it }.coerceIn(constraints.minHeight.rangeTo(constraints.maxHeight))
-
-        val rowY = IntArray(rows) { 0 }
-        for (i in 1 until rows) {
-            rowY[i] = rowY[i - 1] + rowHeights[i - 1]
-        }
-
-        layout(width = width, height = height) {
-            val rowX = IntArray(rows) { 0 }
-            placeables.forEachIndexed { index, placeable ->
-                val row = index % rows
-                placeable.placeRelative(x = rowX[row], y = rowY[row])
-                rowX[row] += placeable.width
-            }
-        }
-    }
-}
-
-@Composable
-fun TagItem(modifier: Modifier, text: String = "Hi Compose") {
-    Card(
-        modifier = modifier, shape = MaterialTheme.shapes.small, border = BorderStroke(Dp.Hairline, Color.Black)
-    ) {
-        Row(modifier = Modifier.padding(start = 6.dp, top = 4.dp, end = 6.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                modifier = Modifier
-                    .size(16.dp)
-                    .background(MaterialTheme.colors.primary)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(text = text, style = MaterialTheme.typography.body1)
-        }
-    }
-}
-
