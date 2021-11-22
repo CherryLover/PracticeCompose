@@ -122,6 +122,49 @@ fun LayoutMainScreen(navController: NavController) {
         NavigationButton("List Part", Router.LayoutList.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
         ImageListItem()
+        Spacer(modifier = Modifier.height(10.dp))
+        CustomModifierToMargin()
+    }
+}
+
+@Composable
+private fun CustomModifierToMargin() {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        // 此处用了整个屏幕 50% 的空间，若想对比使用 Spacer 将注释内容放开即可。
+        /*Column(
+            modifier = Modifier
+                .fillMaxWidth(0.5F)
+                .background(Color.LightGray)
+        ) {
+            Text(text = "with Spacer")
+            Row {
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row {
+                        Text(text = "MarginText", modifier = Modifier.background(Color.White))
+                    }
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(text = "RightText")
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "BottomText")
+        }*/
+        // 此处为以上 View 剩余的空间的 百分比
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(1F)
+                .background(Color.DarkGray)
+        ) {
+            Text(text = "with Custom Modifier")
+            Text(text = "TopText")
+            Text(text = "MarginText", modifier = Modifier
+                .margin(10.dp, 10.dp, 10.dp, 10.dp)
+                .background(Color.White))
+            Text(text = "RightText")
+            Text(text = "BottomText")
+        }
     }
 }
 
