@@ -58,9 +58,20 @@ class LayoutActivity : AppCompatActivity() {
                     composable(Router.Image.router) { ImageScreen() }
                     composable(Router.CustomModifier.router) { CustomModifierScreen() }
                     composable(Router.CustomLayout.router) { CustomLayoutScreen() }
+                    composable(Router.ConstraintLayout.router) { ConstraintLayoutScreen() }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ConstraintLayoutScreen() {
+    BasicLayoutScreen(name = "Constraint Layout", backgroundColor = Color.Black) {
+        LoginChoose(true)
+        Text(text = "这行文字以上的部分使用 ConstraintLayout Chain 实现，以下的部分使用 GuideLine 实现")
+        LoginChoose(false)
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
@@ -158,6 +169,7 @@ fun LayoutMainScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
         NavigationButton("CustomLayout", Router.CustomLayout.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
+        NavigationButton("ConstraintLayout", Router.ConstraintLayout.router, navController)
     }
 }
 
@@ -221,9 +233,13 @@ private fun CustomModifierToMargin() {
 }
 
 @Composable
-fun BasicLayoutScreen(name: String, content: @Composable ColumnScope.() -> Unit) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "This Screen for show $name by Use Compose", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+fun BasicLayoutScreen(name: String, backgroundColor: Color = Color.White, content: @Composable ColumnScope.() -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(backgroundColor)) {
+        Text(
+            text = "This Screen for show $name by Use Compose",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
         Box(contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 content()

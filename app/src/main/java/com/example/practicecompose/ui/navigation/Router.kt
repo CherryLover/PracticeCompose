@@ -29,6 +29,7 @@ sealed class Router(val router: String) {
     object Image: Router("Image")
     object CustomModifier: Router("Custom_Modifier")
     object CustomLayout: Router("Custom_Layout")
+    object ConstraintLayout: Router("Constraint Layout")
 
     companion object {
         object Main : Router("Main")
