@@ -157,10 +157,10 @@ fun BasicScreen(
 }
 
 @Composable
-fun NavigationButton(buttonText: String, router: String, navController: NavController) {
+fun NavigationButton(buttonText: String, router: String, navController: NavController, modifier: Modifier = Modifier) {
     Button(onClick = {
         navController.navigate(route = router)
-    }) {
+    }, modifier = modifier) {
         Text(text = buttonText)
     }
 }

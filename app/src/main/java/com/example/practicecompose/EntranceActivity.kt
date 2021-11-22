@@ -13,10 +13,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.unit.dp
+import com.example.practicecompose.page.AnimationActivity
 import com.example.practicecompose.page.LayoutActivity
 import com.example.practicecompose.page.NavigationActivity
 import com.example.practicecompose.page.YouTubeSampleActivity
+import com.example.practicecompose.ui.codelab.margin
 
 class EntranceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +28,11 @@ class EntranceActivity : AppCompatActivity() {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Top
             ) {
                 SampleItem("GoogleSignUpButton") { YouTubeSampleActivity.start(this@EntranceActivity) }
-                Spacer(modifier = Modifier.height(10.dp))
                 SampleItem("CodeLab Layout") { LayoutActivity.start(this@EntranceActivity) }
-                Spacer(modifier = Modifier.height(10.dp))
+                SampleItem("Animation") { AnimationActivity.start(this@EntranceActivity) }
                 SampleItem("Navigation") { NavigationActivity.start(this@EntranceActivity) }
             }
         }
@@ -38,8 +40,8 @@ class EntranceActivity : AppCompatActivity() {
 }
 
 @Composable
-fun SampleItem(text: String = "", onClicked: () -> Unit) {
-    Button(onClick = onClicked) {
+fun SampleItem(text: String = "", modifier: Modifier = Modifier.margin(top = 10.dp),onClicked: () -> Unit) {
+    Button(onClick = onClicked, modifier = modifier) {
         Text(text = text)
     }
 }

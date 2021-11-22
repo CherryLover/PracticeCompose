@@ -31,6 +31,9 @@ sealed class Router(val router: String) {
     object CustomLayout: Router("Custom_Layout")
     object ConstraintLayout: Router("Constraint Layout")
 
+    object AnimationMain: Router("Animation_Main")
+    object AnimationTranslationX: Router("Animation_TranslationX")
+
     companion object {
         object Main : Router("Main")
         object Feed : Router("Feed") {

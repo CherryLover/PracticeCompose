@@ -231,19 +231,3 @@ private fun CustomModifierToMargin() {
         }
     }
 }
-
-@Composable
-fun BasicLayoutScreen(name: String, backgroundColor: Color = Color.White, content: @Composable ColumnScope.() -> Unit) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.background(backgroundColor)) {
-        Text(
-            text = "This Screen for show $name by Use Compose",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Box(contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                content()
-            }
-        }
-    }
-}

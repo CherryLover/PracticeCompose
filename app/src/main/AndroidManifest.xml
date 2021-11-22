@@ -31,6 +31,7 @@
         <activity
             android:name=".page.LayoutActivity"
             android:label="LayoutActivity" />
+        <activity android:name=".page.AnimationActivity" />
         <activity android:name=".page.NavigationActivity" />
     </application>
 
