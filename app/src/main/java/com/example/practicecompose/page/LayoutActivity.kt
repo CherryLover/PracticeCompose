@@ -121,6 +121,7 @@ fun LayoutMainScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
         NavigationButton("List Part", Router.LayoutList.router, navController)
         Spacer(modifier = Modifier.height(10.dp))
+        ImageListItem()
     }
 }
 
