@@ -1,18 +1,23 @@
 package com.example.practicecompose.ui.codelab
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -90,8 +95,41 @@ fun TabItemWithIcon(
     }
 }
 
+@ExperimentalAnimationApi
+@Composable
+fun EditWithIcon(showText: Boolean = true) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .height(48.dp)
+            .background(MaterialTheme.colors.primary, RoundedCornerShape(50))
+    ) {
+        Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.White,modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .size(24.dp))
+        AnimatedVisibility(visible = showText) {
+//            Row {
+                Text(text = "Edit", color = Color.White, modifier = Modifier.padding(end = 14.dp))
+//                Text(text = "Copy Edit Text")
+//            }
+        }
+        // 使用 if 判断 和 AnimatedVisibility 需要通过不同的设置方式来达到同样的效果
+    // 原因是 AnimatedVisibility 的 scope 只能单个 Item，若多个，需要通过 Layout 进行包裹
+//        if (showText) {
+//            Text(text = "Edit")
+//            Spacer(modifier = Modifier.width(14.dp))
+//        }
+    }
+}
+
 @Preview
 @Composable
 fun ColorChangeAnimationPreview() {
     ColorChangeAnimation()
+}
+
+@ExperimentalAnimationApi
+@Preview
+@Composable
+fun EditWithIconPreview() {
+    EditWithIcon()
 }
