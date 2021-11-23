@@ -32,7 +32,7 @@ sealed class Router(val router: String) {
     object ConstraintLayout: Router("Constraint Layout")
 
     object AnimationMain: Router("Animation_Main")
-    object AnimationTranslationX: Router("Animation_TranslationX")
+    object SimpleValueChange: Router("Simple_Value_Change")
 
     companion object {
         object Main : Router("Main")

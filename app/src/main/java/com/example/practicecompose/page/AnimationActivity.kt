@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.practicecompose.ui.codelab.BasicLayoutScreen
+import com.example.practicecompose.ui.codelab.ColorChangeAnimation
 import com.example.practicecompose.ui.navigation.NavigationButton
 import com.example.practicecompose.ui.navigation.Router
 import com.example.practicecompose.ui.theme.PracticeComposeTheme
@@ -35,7 +36,7 @@ class AnimationActivity : AppCompatActivity() {
             PracticeComposeTheme {
                 NavHost(navController = navController, startDestination = Router.AnimationMain.router) {
                     composable(Router.AnimationMain.router) { AnimationMainScreen(navController = navController) }
-                    composable(Router.AnimationTranslationX.router) { TranslationScreen() }
+                    composable(Router.SimpleValueChange.router) { SimpleValueChangeScreen() }
                 }
             }
         }
@@ -43,13 +44,13 @@ class AnimationActivity : AppCompatActivity() {
 }
 
 @Composable
-fun TranslationScreen() {
-
+fun SimpleValueChangeScreen() {
+    ColorChangeAnimation()
 }
 
 @Composable
 fun AnimationMainScreen(navController: NavController) {
     BasicLayoutScreen(name = "Animation Main") {
-        NavigationButton(buttonText = "translationX", router = Router.AnimationTranslationX.router, navController = navController)
+        NavigationButton(buttonText = "Simple Value Change", router = Router.SimpleValueChange.router, navController = navController)
     }
 }
