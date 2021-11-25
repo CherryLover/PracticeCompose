@@ -51,7 +51,6 @@ class AnimationActivity : AppCompatActivity() {
             PracticeComposeTheme {
                 NavHost(navController = navController, startDestination = Router.AnimationMain.router) {
                     composable(Router.AnimationMain.router) { AnimationMainScreen(navController = navController) }
-                    composable(Router.SimpleValueChange.router) { SimpleValueChangeScreen() }
                 }
             }
         }
@@ -60,39 +59,34 @@ class AnimationActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SimpleValueChangeScreen() {
-    var showEditText by remember { mutableStateOf(true) }
-    var showNoticeText by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-
-    suspend fun showNoticeDelayDismiss() {
-        if (!showNoticeText) {
-            showNoticeText = true
-            delay(3000L)
-            showNoticeText = false
-        }
-    }
-
-    Scaffold(
-        topBar = {
-            ColorChangeAnimation()
-        },
-        floatingActionButton = {
-            EditWithIcon(showEditText) { coroutineScope.launch { showNoticeDelayDismiss() } }
-        },
-    ) {
-        Column {
-            Button(onClick = { showEditText = !showEditText }) {
-                Text(text = "Toggle Edit Text Show")
-            }
-        }
-        NoticeLayout(showNoticeText)
-    }
-}
-
-@Composable
 fun AnimationMainScreen(navController: NavController) {
     BasicLayoutScreen(name = "Animation Main") {
-        NavigationButton(buttonText = "Simple Value Change", router = Router.SimpleValueChange.router, navController = navController)
+        var showEditText by remember { mutableStateOf(true) }
+        var showNoticeText by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+
+        suspend fun showNoticeDelayDismiss() {
+            if (!showNoticeText) {
+                showNoticeText = true
+                delay(3000L)
+                showNoticeText = false
+            }
+        }
+
+        Scaffold(
+            topBar = {
+                ColorChangeAnimation()
+            },
+            floatingActionButton = {
+                EditWithIcon(showEditText) { coroutineScope.launch { showNoticeDelayDismiss() } }
+            },
+        ) {
+            Column {
+                Button(onClick = { showEditText = !showEditText }) {
+                    Text(text = "Toggle Edit Text Show")
+                }
+            }
+            NoticeLayout(showNoticeText)
+        }
     }
 }
