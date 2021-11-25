@@ -6,10 +6,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +24,12 @@ import com.example.practicecompose.ui.navigation.Router
 import com.example.practicecompose.ui.theme.PracticeComposeTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.practicecompose.ui.codelab.NoticeLayout
 import com.example.practicecompose.ui.navigation.TextScreen
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * @description
@@ -58,15 +62,31 @@ class AnimationActivity : AppCompatActivity() {
 @Composable
 fun SimpleValueChangeScreen() {
     var showEditText by remember { mutableStateOf(true) }
-    Column {
-        ColorChangeAnimation()
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = showEditText, onCheckedChange = {
-                showEditText = !showEditText
-            })
-            Text(text = "Show Text")
+    var showNoticeText by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    suspend fun showNoticeDelayDismiss() {
+        if (!showNoticeText) {
+            showNoticeText = true
+            delay(3000L)
+            showNoticeText = false
         }
-        EditWithIcon(showEditText)
+    }
+
+    Scaffold(
+        topBar = {
+            ColorChangeAnimation()
+        },
+        floatingActionButton = {
+            EditWithIcon(showEditText) { coroutineScope.launch { showNoticeDelayDismiss() } }
+        },
+    ) {
+        Column {
+            Button(onClick = { showEditText = !showEditText }) {
+                Text(text = "Toggle Edit Text Show")
+            }
+        }
+        NoticeLayout(showNoticeText)
     }
 }
 

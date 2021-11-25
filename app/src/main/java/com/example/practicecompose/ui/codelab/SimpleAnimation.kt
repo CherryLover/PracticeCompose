@@ -1,8 +1,6 @@
 package com.example.practicecompose.ui.codelab
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -11,10 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Edit
@@ -97,9 +92,10 @@ fun TabItemWithIcon(
 
 @ExperimentalAnimationApi
 @Composable
-fun EditWithIcon(showText: Boolean = true) {
+fun EditWithIcon(showText: Boolean = true, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+            .clickable { onClick() }
             .height(48.dp)
             .background(MaterialTheme.colors.primary, RoundedCornerShape(50))
     ) {
@@ -113,11 +109,37 @@ fun EditWithIcon(showText: Boolean = true) {
 //            }
         }
         // 使用 if 判断 和 AnimatedVisibility 需要通过不同的设置方式来达到同样的效果
-    // 原因是 AnimatedVisibility 的 scope 只能单个 Item，若多个，需要通过 Layout 进行包裹
+        // 原因是 AnimatedVisibility 的 scope 只能单个 Item，若多个，需要通过 Layout 进行包裹
 //        if (showText) {
 //            Text(text = "Edit")
 //            Spacer(modifier = Modifier.width(14.dp))
 //        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun NoticeLayout(show: Boolean) {
+    AnimatedVisibility(
+        visible = show, enter = slideInVertically(initialOffsetY = { fullHeight ->
+            -fullHeight
+        }, animationSpec = tween(150, easing = LinearEasing)),
+        exit = slideOutVertically(targetOffsetY = { fullHeight ->
+            -fullHeight
+        }, animationSpec = tween(150, easing = LinearEasing))
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            color = MaterialTheme.colors.secondary
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
+            ) {
+                Text(text = "Edit is not support", Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+            }
+        }
     }
 }
 
@@ -131,5 +153,5 @@ fun ColorChangeAnimationPreview() {
 @Preview
 @Composable
 fun EditWithIconPreview() {
-    EditWithIcon()
+    EditWithIcon() { }
 }
