@@ -1,8 +1,7 @@
 package com.example.practicecompose.ui.codelab
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,22 +36,48 @@ val Purple700 = Color(0xFF3700B3)
 val Green800 = Color(0xFF2E7D32)
 
 @Composable
-fun ColorChangeAnimation() {
+fun PageTab() {
     var tabPage by remember { mutableStateOf(TabPage.Home) }
     val backgroundColor by animateColorAsState(if (tabPage == TabPage.Home) Purple100 else Green300, tween(500, easing = LinearEasing))
     val borderColor = if (tabPage == TabPage.Home) Purple700 else Green800
-    TabRow(selectedTabIndex = tabPage.ordinal,
+
+    val transition = updateTransition(tabPage, label = "Tab indicator")
+
+
+    TabRow(
+        selectedTabIndex = tabPage.ordinal,
         backgroundColor = backgroundColor,
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
         indicator = {
+            val indicatorLeft by transition.animateDp(label = "indicatorLeft", transitionSpec = {
+                if (TabPage.Home isTransitioningTo TabPage.Account) {
+                    spring(stiffness = Spring.StiffnessVeryLow)
+                } else {
+                    spring(stiffness = Spring.StiffnessMedium)
+                }
+            }) { tab ->
+                it[tab.ordinal].left
+            }
+            val indicatorRight by transition.animateDp(label = "indicatorRight", transitionSpec = {
+                if (TabPage.Home isTransitioningTo TabPage.Account) {
+                    spring(stiffness = Spring.StiffnessMedium)
+                } else {
+                    spring(stiffness = Spring.StiffnessVeryLow)
+                }
+            }) { tab ->
+                it[tab.ordinal].right
+            }
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.BottomStart)
-                    .offset(it[tabPage.ordinal].left)
-                    .width(it[tabPage.ordinal].right - it[tabPage.ordinal].left)
+//                    .offset(it[tabPage.ordinal].left)
+                    .offset(indicatorLeft)
+//                    .width(it[tabPage.ordinal].right - it[tabPage.ordinal].left)
+                    .width(indicatorRight - indicatorLeft)
                     .padding(4.dp)
                     .fillMaxSize()
                     .border(BorderStroke(2.dp, borderColor), RoundedCornerShape(4.dp))
@@ -198,7 +223,7 @@ fun TopicItemPreview() {
 @Preview
 @Composable
 fun ColorChangeAnimationPreview() {
-    ColorChangeAnimation()
+    PageTab()
 }
 
 @ExperimentalAnimationApi
