@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -61,6 +62,7 @@ fun AnimationMainScreen(navController: NavController) {
         var showEditText by remember { mutableStateOf(true) }
         var showNoticeText by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
+        var showWeatherLoading by remember { mutableStateOf(false) }
 
         val topicList = stringArrayResource(id = R.array.topics).toList()
 
@@ -72,6 +74,16 @@ fun AnimationMainScreen(navController: NavController) {
             }
         }
 
+        suspend fun fakeRequestNetFetchData() {
+            if (!showWeatherLoading) {
+                showWeatherLoading = true
+                delay(3000L)
+                showWeatherLoading = false
+            }
+        }
+
+
+
         Scaffold(
             topBar = {
                 PageTab()
@@ -81,6 +93,11 @@ fun AnimationMainScreen(navController: NavController) {
             },
         ) {
             Column(modifier = Modifier.background(Green300)) {
+
+                Spacer(modifier = Modifier.height(12.dp))
+                LoadingWeather(modifier = Modifier.padding(horizontal = 16.dp) ,showWeatherLoading) { coroutineScope.launch { fakeRequestNetFetchData() } }
+
+
                 Spacer(modifier = Modifier.height(12.dp))
                 topicList.forEach { topic ->
                     TopicItem(topic = topic)

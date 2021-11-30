@@ -7,20 +7,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 /**
  * @description
@@ -212,6 +212,68 @@ fun TopicItem(
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
+}
+
+@Composable
+fun LoadingWeather(modifier: Modifier = Modifier, loading: Boolean = true, refresh: (() -> Unit)? = null) {
+    Row(
+        modifier = modifier
+            .background(Color.White)
+            .padding(horizontal = 16.dp)
+    ) {
+        if (loading) {
+            val infiniteTransition = rememberInfiniteTransition()
+            val alpha by infiniteTransition.animateFloat(initialValue = 0.7F, targetValue = 1F, animationSpec = infiniteRepeatable(
+                animation = keyframes {
+                    durationMillis = 1000
+                }, repeatMode = RepeatMode.Reverse))
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray.copy(alpha))
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(36.dp)
+                        .clip(RoundedCornerShape(0))
+                        .background(Color.LightGray.copy(alpha))
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFFFB300))
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = "18 ℃", fontSize = 24.sp, modifier = Modifier.height(36.dp))
+                Spacer(modifier = Modifier.weight(1F))
+                IconButton(onClick = { refresh?.invoke() }) {
+                    Icon(imageVector = Icons.Default.Refresh, contentDescription = "refresh")
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun LoadingWeatherPreview() {
+    LoadingWeather(loading = true) { }
 }
 
 @Preview
