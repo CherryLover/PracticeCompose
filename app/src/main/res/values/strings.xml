@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PracticeCompose</string>
+    <string-array name="topics">
+        <item>2 new packages arrived</item>
+        <item>DIY project recommendation</item>
+        <item>Festival next month</item>
+        <item>New flower seeds available</item>
+    </string-array>
 </resources>

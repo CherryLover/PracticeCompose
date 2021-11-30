@@ -7,27 +7,26 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.practicecompose.ui.codelab.BasicLayoutScreen
-import com.example.practicecompose.ui.codelab.ColorChangeAnimation
-import com.example.practicecompose.ui.codelab.EditWithIcon
-import com.example.practicecompose.ui.navigation.NavigationButton
+import com.example.practicecompose.R
+import com.example.practicecompose.ui.codelab.*
 import com.example.practicecompose.ui.navigation.Router
 import com.example.practicecompose.ui.theme.PracticeComposeTheme
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.practicecompose.ui.codelab.NoticeLayout
-import com.example.practicecompose.ui.navigation.TextScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -65,6 +64,8 @@ fun AnimationMainScreen(navController: NavController) {
         var showNoticeText by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
 
+        val topicList = stringArrayResource(id = R.array.topics).toList()
+
         suspend fun showNoticeDelayDismiss() {
             if (!showNoticeText) {
                 showNoticeText = true
@@ -81,8 +82,13 @@ fun AnimationMainScreen(navController: NavController) {
                 EditWithIcon(showEditText) { coroutineScope.launch { showNoticeDelayDismiss() } }
             },
         ) {
-            Column {
-                Button(onClick = { showEditText = !showEditText }) {
+            Column(modifier = Modifier.background(Green300)) {
+                Spacer(modifier = Modifier.height(12.dp))
+                topicList.forEach { topic ->
+                    TopicItem(topic = topic)
+                }
+
+                Button(onClick = { showEditText = !showEditText }, modifier = Modifier.margin(top = 12.dp)) {
                     Text(text = "Toggle Edit Text Show")
                 }
             }

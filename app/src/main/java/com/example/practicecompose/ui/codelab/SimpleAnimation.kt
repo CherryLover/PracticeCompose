@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -141,6 +142,57 @@ fun NoticeLayout(show: Boolean) {
             }
         }
     }
+}
+
+@Composable
+fun TopicItem(
+    topic: String = "3 new packages arrived",
+    content: String = "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+    onClick: (() -> Unit)? = null
+) {
+    var showContent by remember { mutableStateOf(false) }
+    Column {
+        if (showContent) {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        Surface(
+            color = Color.White,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clickable {
+                    showContent = !showContent
+                    onClick?.invoke()
+                }
+                .animateContentSize(),
+            elevation = 5.dp
+        ) {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.height(48.dp)) {
+                    Icon(Icons.Default.Info, contentDescription = "Info")
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = topic,
+                        style = MaterialTheme.typography.body1
+                    )
+                }
+                if (showContent) {
+                    Row {
+                        Text(text = content)
+                    }
+                }
+            }
+        }
+        if (showContent) {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+@Preview
+@Composable
+fun TopicItemPreview() {
+    TopicItem()
 }
 
 @Preview
