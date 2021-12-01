@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -65,6 +66,9 @@ fun AnimationMainScreen(navController: NavController) {
         var showWeatherLoading by remember { mutableStateOf(false) }
 
         val topicList = stringArrayResource(id = R.array.topics).toList()
+        val taskList = stringArrayResource(id = R.array.tasks)
+
+        val tasks = remember { mutableStateListOf(*taskList) }
 
         suspend fun showNoticeDelayDismiss() {
             if (!showNoticeText) {
@@ -95,12 +99,32 @@ fun AnimationMainScreen(navController: NavController) {
             Column(modifier = Modifier.background(Green300)) {
 
                 Spacer(modifier = Modifier.height(12.dp))
-                LoadingWeather(modifier = Modifier.padding(horizontal = 16.dp) ,showWeatherLoading) { coroutineScope.launch { fakeRequestNetFetchData() } }
+                LoadingWeather(modifier = Modifier.padding(horizontal = 16.dp), showWeatherLoading) { coroutineScope.launch { fakeRequestNetFetchData() } }
 
 
                 Spacer(modifier = Modifier.height(12.dp))
                 topicList.forEach { topic ->
                     TopicItem(topic = topic)
+                }
+                if (tasks.isEmpty()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Button(onClick = { tasks.addAll(taskList) }, modifier = Modifier.padding(horizontal = 16.dp)) {
+                        Text(text = "添加 TODO")
+                    }
+                } else {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    LazyColumn() {
+                        items(count = tasks.size) { position->
+                            val get = tasks.getOrNull(position)
+                            if (get != null) {
+                                key(get) {
+                                    TaskItem(task = get, modifier = Modifier.padding(horizontal = 16.dp)) {
+                                        tasks.remove(get)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Button(onClick = { showEditText = !showEditText }, modifier = Modifier.margin(top = 12.dp)) {
