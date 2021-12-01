@@ -1,5 +1,6 @@
 package com.example.practicecompose.ui.codelab
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -7,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
@@ -23,12 +27,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
@@ -282,28 +290,62 @@ fun LoadingWeather(modifier: Modifier = Modifier, loading: Boolean = true, refre
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TaskItem(modifier: Modifier = Modifier, task: String = "Buy some milk", onDismissed: () -> Unit) {
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .swipeToDismiss(onDismissed)
-    ) {
-        Row(
-            Modifier
-                .height(36.dp)
-                .background(Color.White), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start
+    ConstraintLayout {
+        val (itemInfo, itemMenu) = createRefs()
+
+        Row(modifier = modifier
+            .constrainAs(itemMenu) {
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+            }
+            .height(48.dp)
+            , horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .width(72.dp)
+                .background(Color.Red)
+                .clickable { }, contentAlignment = Alignment.Center) {
+                Text(text = "Delete", textAlign = TextAlign.Center)
+            }
+            Box(modifier = Modifier
+                .fillMaxHeight()
+                .width(72.dp)
+                .background(Color.Yellow)
+                .clickable { }, contentAlignment = Alignment.Center) {
+                Text(text = "Move", textAlign = TextAlign.Center)
+            }
+        }
+
+        Surface(
+            modifier = modifier
+                .constrainAs(itemInfo) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+                .fillMaxWidth()
+                .swipeShowMenu(144.dp)
         ) {
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = task,
-                style = MaterialTheme.typography.body1
-            )
+            Row(
+                Modifier
+                    .background(Color.White)
+                    .height(48.dp), verticalAlignment = Alignment.CenterVertically
+            ) {
+                Spacer(modifier = Modifier.width(16.dp))
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = task,
+                    style = MaterialTheme.typography.body1
+                )
+            }
         }
     }
 }
@@ -336,6 +378,43 @@ private fun Modifier.swipeToDismiss(onDismissed: () -> Unit): Modifier = compose
                     } else {
                         offset.animateDecay(velocity, decay)
                         onDismissed()
+                    }
+                }
+            }
+        }
+    }.offset { IntOffset(offset.value.roundToInt(), 0) }
+}
+
+private fun Modifier.swipeShowMenu(menusWidth: Dp): Modifier = composed {
+    var offset = remember { Animatable(0F) }
+    var hDragOffset = 0F
+    pointerInput(Unit) {
+        val decay = splineBasedDecay<Float>(this)
+        coroutineScope {
+            while (true) {
+                val pointId = awaitPointerEventScope { awaitFirstDown().id }
+                offset.stop()
+                val velocityTracker = VelocityTracker()
+                awaitPointerEventScope {
+                    horizontalDrag(pointerId = pointId) { change ->
+                        hDragOffset = offset.value + change.positionChange().x
+                        launch {
+                            offset.snapTo(hDragOffset)
+                        }
+                        velocityTracker.addPosition(change.uptimeMillis, change.position)
+                        change.consumePositionChange()
+                    }
+                }
+                val velocity = velocityTracker.calculateVelocity().x
+                val targetOffset = decay.calculateTargetValue(offset.value, velocity)
+                val max = menusWidth.toPx()
+                offset.updateBounds(lowerBound = 0 - max, upperBound = max)
+                launch {
+                    val bounds = max
+                    if (targetOffset.absoluteValue <= bounds) {
+                        offset.animateTo(targetValue = 0F, initialVelocity = velocity)
+                    } else {
+                        offset.animateDecay(velocity, decay)
                     }
                 }
             }
