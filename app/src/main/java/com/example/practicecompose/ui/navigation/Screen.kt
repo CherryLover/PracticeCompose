@@ -2,10 +2,10 @@ package com.example.practicecompose.ui.navigation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.practicecompose.ui.component.*
+import com.example.practicecompose.ui.component.IconTabs
 import kotlin.random.Random
 
 /**
@@ -120,6 +122,17 @@ fun TextScreen(
     ) {
         Text(text = screenName, fontSize = MaterialTheme.typography.h3.fontSize)
         Spacer(modifier = Modifier.height(10.dp))
+    }
+}
+
+@Composable
+fun TabLayoutScreen() {
+    Column {
+        TextTabs()
+        ScrollTextTab()
+        IconTabs()
+        TextIconTabs()
+        CustomTabs(indicatorColor = Color.Green)
     }
 }
 

@@ -20,6 +20,7 @@ sealed class Router(val router: String) {
     object News : Router("News")
     object Explore : Router("Explore")
     object Favorite : Router("Favorite")
+    object TabLayout : Router("Favorite")
 
     object LayoutMain: Router("Layout_Main")
     object LayoutUserInfo: Router("Layout_UserInfo")

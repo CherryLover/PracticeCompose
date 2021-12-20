@@ -33,6 +33,7 @@
             android:label="LayoutActivity" />
         <activity android:name=".page.AnimationActivity" />
         <activity android:name=".page.NavigationActivity" />
+        <activity android:name=".page.ComponentActivity" />
     </application>
 
 </manifest>

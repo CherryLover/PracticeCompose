@@ -15,10 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.unit.dp
-import com.example.practicecompose.page.AnimationActivity
-import com.example.practicecompose.page.LayoutActivity
-import com.example.practicecompose.page.NavigationActivity
-import com.example.practicecompose.page.YouTubeSampleActivity
+import com.example.practicecompose.page.*
 import com.example.practicecompose.ui.codelab.margin
 
 class EntranceActivity : AppCompatActivity() {
@@ -34,6 +31,7 @@ class EntranceActivity : AppCompatActivity() {
                 SampleItem("CodeLab Layout") { LayoutActivity.start(this@EntranceActivity) }
                 SampleItem("Animation") { AnimationActivity.start(this@EntranceActivity) }
                 SampleItem("Navigation") { NavigationActivity.start(this@EntranceActivity) }
+                SampleItem("Component") { ComponentActivity.start(this@EntranceActivity) }
             }
         }
     }
