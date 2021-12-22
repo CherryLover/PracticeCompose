@@ -14,6 +14,7 @@
 5. [GradientButton](https://www.youtube.com/watch?v=vPOS6L2SEX0&list=PLSrm9z4zp4mEWwyiuYgVMWcDFdsebhM-r&index=15&ab_channel=Stevdza-San) 完成
 6. [CustomText](https://www.youtube.com/watch?v=iIm-7fmjyaA&list=PLSrm9z4zp4mEWwyiuYgVMWcDFdsebhM-r&index=7&ab_channel=Stevdza-San) 完成
 7. [Navigation-Compose](https://developer.android.com/jetpack/compose/navigation) 完成
+8. [Utils for Compose](https://google.github.io/accompanist) 完成 PagerLayouts
 
 
 ## 资源网站
