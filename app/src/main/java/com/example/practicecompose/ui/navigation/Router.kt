@@ -35,6 +35,11 @@ sealed class Router(val router: String) {
     object AnimationMain: Router("Animation_Main")
     object SimpleValueChange: Router("Simple_Value_Change")
 
+    object ComMain: Router("ComponentMain")
+    object ComTab: Router("ComponentTab")
+    object ComPager: Router("ComponentPager")
+    object ComTabPager: Router("ComponentTabPager")
+
     companion object {
         object Main : Router("Main")
         object Feed : Router("Feed") {

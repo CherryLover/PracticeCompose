@@ -2,7 +2,11 @@ package com.example.practicecompose.ui.navigation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -10,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -18,7 +23,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.practicecompose.ui.component.*
-import com.example.practicecompose.ui.component.IconTabs
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
@@ -133,6 +142,52 @@ fun TabLayoutScreen() {
         IconTabs()
         TextIconTabs()
         CustomTabs(indicatorColor = Color.Green)
+    }
+}
+
+@OptIn(InternalCoroutinesApi::class)
+@Composable
+fun PagerScreen() {
+    Column {
+        HPagers()
+        VPagers()
+        HPagerFeatures()
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabPagerScreen(
+    topics: List<String> = listOf(
+        "DrawablePainter",
+        "Flow layouts",
+        "Permissions",
+        "Navigation Animation",
+        "Navigation Material"
+    )
+) {
+    val pageState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
+    Column(Modifier.fillMaxSize()) {
+        ScrollableTabRow(selectedTabIndex = pageState.currentPage, edgePadding = 0.dp) {
+            topics.forEachIndexed { idx, topic ->
+                Tab(selected = pageState.currentPage == idx, onClick = {
+                    coroutineScope.launch {
+                        pageState.scrollToPage(idx)
+                    }
+                }) {
+                    Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp)) {
+                        Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Account")
+                        Text(text = topic)
+                    }
+                }
+            }
+        }
+        HorizontalPager(count = topics.size, state = pageState) { position ->
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = topics[position], fontSize = 22.sp)
+            }
+        }
     }
 }
 
